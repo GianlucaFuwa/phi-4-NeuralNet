@@ -50,8 +50,6 @@ function [e,s,a] = phi4MC_rotexam(L, M, beta, lambda, net, nprod, cycles)
    
    s =zeros(Nprod,1);
    e =zeros(Nprod,1);
-   %m =zeros(Nprod,1);
-   %chi2 = zeros(Nprod,1); 
    
    for l=1:Nprod
       for k=1:Loccylces
@@ -113,8 +111,6 @@ function [e,s,a] = phi4MC_rotexam(L, M, beta, lambda, net, nprod, cycles)
       end
       s(l) = action(beta,lambda,phi,np,nm);
       e(l) = nncorr(phi,np);
-      %m(l) = sum(phi,[1 2]);
-      %chi2(l) = sum(phi,[1 2])^2/L^2;
    end
    a = Acc/(Nprod*Netcycles)*100; 
    fprintf('Acceptance Rate was %0.3f %% \n',a);
