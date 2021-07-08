@@ -24,13 +24,6 @@ elseif net.Gnet.Nlayers == 4
     % calculate jacobian of each network's output wrt weights
     net.Gnet = net_dNetdw2(net.Gnet);
     net.Fnet = net_dNetdw2(net.Fnet); 
-elseif net.Gnet.Nlayers == 5
-    % calculate jacobian of G wrt y1
-    net.Gnet = net_dNetdI3(net.Gnet,true);
-    net.Fnet = net_dNetdI3(net.Fnet,false);
-    % calculate jacobian of each network's output wrt weights
-    net.Gnet = net_dNetdw3(net.Gnet);
-    net.Fnet = net_dNetdw3(net.Fnet);    
 end
  
 % calculate gradients of cost wrt weights
