@@ -1,3 +1,5 @@
+% calc gradient of network output wrt weights for 2-hidden-layer network
+% identity activation required in first and last layer
 function net = ffnet_dNetdw2(net)
 
 dO3dI3Tw3 = net.dO3dI3T * gpuArray(net.w{3});
