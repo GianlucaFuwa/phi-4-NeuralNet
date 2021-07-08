@@ -1,4 +1,6 @@
-function net = ffnet_dNetdI2(net,G)
+% compute gradients of 2-hidden-layer residual block output wrt input
+% identity activation in required first and last layer
+function net = net_dNetdI2(net,G)
 
 leny1 = length(net.O{4});
 lenO1 = length(net.O{1});
