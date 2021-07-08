@@ -4,6 +4,8 @@
 % Mlayers (int) = Number of layers in ResBlocks
 % Mneurons (MlayersD vector, int) = Number of neurons per layer in ResBlocks
 % hasBiasNeuron (Mlayers-dim. vector, bool) = Bias neuron per layer in RBs
+% B (int,even) = Block size
+% beta, lambda (real) = Parameters of phi^4 simulation for calculation of action
 
 function ffnet=make_ffnet(Nneurons, Mlayers, Mneurons, hasBiasNeuron, B, beta, lambda)
 % only allow even number of output neurons in order for RevNet to function
@@ -61,12 +63,9 @@ end
 
 ffnet.Fnet.actfunc{Mlayers}  = @(x) x;
 ffnet.Fnet.dactfunc{Mlayers} = @(x) ones('like',x);
-%ffnet.Fnet.dactfunc{Mlayers} = @(x) 3*x.^2;
 
 ffnet.Gnet.actfunc{Mlayers}  = @(x) x;
 ffnet.Gnet.dactfunc{Mlayers} = @(x) ones('like',x);
-%ffnet.Gnet.dactfunc{Mlayers} = @(x) 3*x.^2;
-
 
 % init weights of ResBlocks as normally distributed numbers with set
 % variance
@@ -98,16 +97,11 @@ ffnet.S  = @(xout) sum(xout(1:B^2).^2) + sum(lambda*(xout(1:B^2).^2-1).^2) ...
            - beta*xout(1:B^2+4*B).'*ffnet.M*xout(1:B^2+4*B);
 ffnet.dS = @(xout) 2*xout(1:B^2)+lambda*(4*xout(1:B^2).^3-4*xout(1:B^2)) ...
            - beta*(C(xout,ffnet.M,B));      
-
-%ffnet.E  = @(xout,xtarget) norm(xout(1:B^2)-xtarget(1:B^2))^2/B^2;
-%ffnet.dE = @(xout,xtarget) 2*(xout(1:B^2)-xtarget(1:B^2))/B^2;
-           
-%ffnet.E = @(xout,xtarget) ffnet.S(xout)/ffnet.S(xtarget);
-%ffnet.dE = @(xout,xtarget) ffnet.dS(xout)/ffnet.S(xtarget);
        
 ffnet.E = @(xout,xtarget) (ffnet.S(xout)-ffnet.S(xtarget))^2/1000+norm(xout(1:B^2)-xtarget(1:B^2))^2/B^2; 
 ffnet.dE = @(xout,xtarget) 2*ffnet.dS(xout)*(ffnet.S(xout)-ffnet.S(xtarget))/1000+2*(xout(1:B^2)-xtarget(1:B^2))/B^2;
 
+% compute coupling matrix for action calculation 
 function Mx = couple1(B,beta)
 Ix1 = [];
 Ix2 = [];
