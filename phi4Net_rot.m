@@ -1,7 +1,7 @@
 % Monte Carlo Simulation of the 2D phi^4 theory with one real field component
 %
 % Tomasz Korzec 2021
-function [e,s,a] = phi4MC_rotexam(L, M, beta, lambda, net, nprod, cycles)
+function [e,s,G0,chi2,a] = phi4MC_rotexam(L, M, beta, lambda, net, nprod, cycles)
    Ntherm = 1000;
    Nprod  = nprod;
    Acc = 0;
@@ -50,6 +50,8 @@ function [e,s,a] = phi4MC_rotexam(L, M, beta, lambda, net, nprod, cycles)
    
    s =zeros(Nprod,1);
    e =zeros(Nprod,1);
+   G0 =zeros(Nprod,1);
+   chi2 = zeros(Nprod,1); 
    
    for l=1:Nprod
       for k=1:Loccylces
@@ -106,11 +108,12 @@ function [e,s,a] = phi4MC_rotexam(L, M, beta, lambda, net, nprod, cycles)
       if rand<min(1,exp(-DeltaS))
           phi(Ip(bx:bx+B+1, by:by+B+1)) = bphi;
           Acc = Acc + 1;
-          Delta = Delta + exp(-DeltaS);
       end
       end
       s(l) = action(beta,lambda,phi,np,nm);
       e(l) = nncorr(phi,np);
+      G0(l) = sum(phi.^2,'all')/L^2;
+      chi2(l) = sum(phi,'all')*sum(phi,'all')/L^2;      
    end
    a = Acc/(Nprod*Netcycles)*100; 
    fprintf('Acceptance Rate was %0.3f %% \n',a);
