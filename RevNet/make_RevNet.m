@@ -98,8 +98,8 @@ ffnet.S  = @(xout) sum(xout(1:B^2).^2) + sum(lambda*(xout(1:B^2).^2-1).^2) ...
 ffnet.dS = @(xout) 2*xout(1:B^2)+lambda*(4*xout(1:B^2).^3-4*xout(1:B^2)) ...
            - beta*(C(xout,ffnet.M,B));      
        
-ffnet.E = @(xout,xtarget) (ffnet.S(xout)-ffnet.S(xtarget))^2/1000+norm(xout(1:B^2)-xtarget(1:B^2))^2/B^2; 
-ffnet.dE = @(xout,xtarget) 2*ffnet.dS(xout)*(ffnet.S(xout)-ffnet.S(xtarget))/1000+2*(xout(1:B^2)-xtarget(1:B^2))/B^2;
+ffnet.E = @(xout,xtarget)  ffnet.S(xout)/(abs(ffnet.S(xtarget))+1e-6)/10+norm(xout(1:B^2)-xtarget(1:B^2))^2/B^2; 
+ffnet.dE = @(xout,xtarget)  ffnet.dS(xout)/(abs(ffnet.S(xtarget))+1e-6)/10+2*(xout(1:B^2)-xtarget(1:B^2))/B^2;
 
 % compute coupling matrix for action calculation 
 function Mx = couple1(B,beta)
