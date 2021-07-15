@@ -1,8 +1,9 @@
+% set simulation parameters for network and check-ups conducted during training
 L = 12;
 M = 8;
 beta = 0.6586246;
 lambda = 0.25;
-Nprod = 50000;
+Nprod = 100000;
 
 Net = make_ffnet([98 98],3,[66 400 32],[true true false],M,beta,lambda);
 
@@ -13,9 +14,10 @@ beta1 = 0.9; % init momentum
 beta2 = 0.999;
 epsilon = 1e-8;
 alpha = 1e-4; % init learining rate
-regu = 0; % weight decay parameter
+regu = 5e-5; % weight decay parameter
 eta = 1;
 
+% init training set
 trainx = trainsetrot{1}(1:end,1:Ntrain);
 trainy = trainsetrot{2}(1:end,1:Ntrain);
 validx = trainsetrot{1}(1:end,Ntrain+1:Ntrain+Nvalid);
@@ -26,7 +28,6 @@ meanEvalid = zeros(1,Epochs+1);
 accrates = zeros(1,Epochs+1);
 taues = zeros(1,Epochs+1);
 tauss = zeros(1,Epochs+1);
-GoodTaus = cell(1,Epochs+1);
 
 numweights = Net.Fnet.Nlayers-1;
 mF = cell(1,numweights);
@@ -65,7 +66,7 @@ for i = 1:Epochs+1
         betat = beta1*(1-t/(it-Epochs/50*Ntrain))/((1-beta1)+beta1*(1-t/(it-Epochs/50*Ntrain))); 
         mF{a} = betat*mF{a}+gF{a};
         mG{a} = betat*mG{a}+gG{a};
-        %
+        % Update weights
         Net.Fnet.w{a}(:) = Net.Fnet.w{a}(:) ...
                 - eta*(alphat*(mF{a}./(sqrt(vF{a})+epsilon))+regu*Net.Fnet.w{a}(:));
         Net.Gnet.w{a}(:) = Net.Gnet.w{a}(:) ...
@@ -118,7 +119,7 @@ title('Training Evaluation');
 xlabel('Epoch Number');
 ylabel('Avg Loss');
 xlim([0 Epochs+1]);
-legend({'Training','Validation','Acc. Rate'},'Location','southwest');
+legend({'Training','Validation','Acc. Rate'},'Location','west');
 
 
 clear a alpha alphat beta1 beta2 betat E Epochs epsilon Etottrain Etotval Evalid...
