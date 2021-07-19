@@ -91,7 +91,7 @@ for i = 1:Epochs+1
     fprintf('Mean E of training cycle %4d was: %0.10f (%+0.10f)\n',i-1,Etottrain/Ntrain,Etottrain/Ntrain-meanEtrain(i-1));
     fprintf('Mean E of validation cycle %4d was: %0.10f (%+0.10f)\n',i-1,Etotval/Nvalid,Etotval/Nvalid-meanEvalid(i-1));
     end
-    [e,s,a] = phi4MC_rotexam(L,M,beta,lambda,Net,Nprod,1);
+    [e,s,a] = phi4Net_rot(L,M,beta,lambda,Net,Nprod,1);
     [~,~,~,taue,~]=UWerr(e,1.5,length(e),1);
     [~,~,~,taus,~]=UWerr(s,1.5,length(s),1);
     accrates(i) = a/100; % track acceptance rate
