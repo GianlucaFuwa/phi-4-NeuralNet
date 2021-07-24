@@ -61,7 +61,6 @@ function [e,s,G0,chi2,a] = phi4Net_rot(L, M, beta, lambda, net, nprod, netcycles
       by = randi(L);
       % 2) cut out (B+2) x (B+2)  section of phi-field mod periodic b.c.
       bphi = phi(Ip(bx:bx+B+1, by:by+B+1));
-      % 3) divide the block into x1,x2,x3 for the KI update
      
       % boundaries
       x3 = bphi(Ix3);
