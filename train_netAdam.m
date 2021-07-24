@@ -54,10 +54,10 @@ for i = 1:Epochs+1
             Etottrain = Etottrain + E;
         end
     else     
-    for l = shuffle(1:Ntrain)
+    for l = shuffle(1:Ntrain) % shuffle trainingset in each epoch
     t = t+1;  
     Net = ffnet_forward(Net,trainx(:,l),M);
-    [gF,gG] = ffnet_backpropBatch(Net,trainy(:,l));
+    [gF,gG] = ffnet_backpropBatch(Net,trainy(:,l)); % compute gradients
     alphat = alpha*sqrt(1-beta2^t)/(1-beta1^t);    
     for a = 1:numweights
         vF{a} = beta2*vF{a}+(1-beta2)*gF{a}.^2;
@@ -85,25 +85,20 @@ for i = 1:Epochs+1
 
     meanEtrain(i) = Etottrain/Ntrain;
     meanEvalid(i) = Etotval/Nvalid;
+    % track loss
     if i == 1
         fprintf('Mean E of assessment cycle was: %0.10f\n',Etottrain/Ntrain);
     else 
     fprintf('Mean E of training cycle %4d was: %0.10f (%+0.10f)\n',i-1,Etottrain/Ntrain,Etottrain/Ntrain-meanEtrain(i-1));
     fprintf('Mean E of validation cycle %4d was: %0.10f (%+0.10f)\n',i-1,Etotval/Nvalid,Etotval/Nvalid-meanEvalid(i-1));
     end
-    [e,s,a] = phi4Net_rot(L,M,beta,lambda,Net,Nprod,1);
-    [~,~,~,taue,~]=UWerr(e,1.5,length(e),1);
-    [~,~,~,taus,~]=UWerr(s,1.5,length(s),1);
+    [~,~,~,~,a] = phi4Net_rot(L,M,beta,lambda,Net,Nprod,1,0);
     accrates(i) = a/100; % track acceptance rate
-    taues(i) = taue*a/100; % track status of autocorrelation times
-    tauss(i) = taus*a/100;
-    fprintf('taue was: %0.10f\n',taues(i));
-    fprintf('taus was: %0.10f\n',tauss(i));
     if mod(i,Epochs/10) == 0
         eta = eta/2;
     end
 end
-save('Net.mat','Net','meanEtrain','meanEvalid','accrates','taues','tauss')
+save('Net.mat','Net','meanEtrain','meanEvalid','accrates')
 
 figure
 plot(1:Epochs+1, meanEtrain/meanEtrain(1), 'bo-', 'LineWidth', 1, 'MarkerSize', 3);
@@ -111,8 +106,6 @@ hold on
 plot(1:Epochs+1, meanEvalid/meanEtrain(1), 'ro-', 'LineWidth', 1, 'MarkerSize', 3);
 hold on
 plot(1:Epochs+1, accrates, 'ko-', 'Linewidth', 1, 'MarkerSize', 3);
-hold on
-plot(1:Epochs+1, taues/max(taues), 'mo-', 'Linewidth', 1, 'MarkerSize', 3);
 hold off
 
 title('Training Evaluation');
