@@ -1,12 +1,10 @@
 % Monte Carlo Simulation of the 2D phi^4 theory with one real field component
 %
 % Tomasz Korzec, Gianluca Fuwa 2021
-function [e,s,G0,chi2,a] = phi4Net_rot(L, M, beta, lambda, net, nprod, cycles)
+function [e,s,G0,chi2,a] = phi4Net_rot(L, M, beta, lambda, net, nprod, netcycles, loccycles)
    Ntherm = 1000;
    Nprod  = nprod;
    Acc = 0;
-   Loccylces = 2;
-   Netcycles = cycles;
    
    B = M; % 8x8 blocks for 'non-local' updates
    if L<B+2
@@ -53,10 +51,10 @@ function [e,s,G0,chi2,a] = phi4Net_rot(L, M, beta, lambda, net, nprod, cycles)
    chi2 = zeros(Nprod,1); 
    
    for l=1:Nprod
-      for k=1:Loccylces
+      for k=1:loccylces
          phi=sweep(beta, lambda, phi, np, nm);
       end
-      for i=1:Netcycles
+      for i=1:netcycles
       % create 'perfect' output for  a random block
       % 1) random corner of the block
       bx = randi(L);
