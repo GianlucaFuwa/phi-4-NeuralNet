@@ -68,7 +68,7 @@ function [e,s,G0,chi2,a] = phi4Net_rot(L, M, beta, lambda, net, nprod, netcycles
       Sold = block_action(beta,lambda,bphi,np,B);
       
       % find one of 4 boundaries with highest  sum(|phi(x)|) and rotate so
-      % it's on top. Then multiply so sum(phi(x)) of that boundary is
+      % it's on top. Then multiply so that sum(phi(x)) of that boundary is
       % positive
       x3mat(:) = x3; % pass 4 boundaries onto a (4xM) matrix
       x3matabssum = sum(abs(x3mat)); % calc abs. sums of each column 
