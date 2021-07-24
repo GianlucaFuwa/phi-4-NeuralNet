@@ -1,11 +1,10 @@
 % Monte Carlo Simulation of the 2D phi^4 theory with one real field component
 %
-% Tomasz Korzec 2021
+% Tomasz Korzec, Gianluca Fuwa 2021
 function [e,s,G0,chi2,a] = phi4Net_rot(L, M, beta, lambda, net, nprod, cycles)
    Ntherm = 1000;
    Nprod  = nprod;
    Acc = 0;
-   Delta = 0;
    Loccylces = 2;
    Netcycles = cycles;
    
