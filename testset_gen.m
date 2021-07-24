@@ -2,7 +2,7 @@ L = 12;
 M = 8;
 beta = 0.6586246;
 lambda = 0.25;
-Nprod = 10000;
+Nprod = 2000000;
 
 % create training set
 %[~,~,trainsetrot] = phi4MC_rotteacher(L,M,beta,lambda,true);
