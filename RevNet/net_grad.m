@@ -1,4 +1,4 @@
-% compute gradient of loss wrt weights
+% compute gradient of loss wrt weights for network with 1 hidden layer
 function [dEdwF,dEdwG] = net_backpropBatch(net, goal)
 dEdwF = cell(1,2);
 dEdwG = cell(1,2);
