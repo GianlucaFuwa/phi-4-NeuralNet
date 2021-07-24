@@ -9,22 +9,12 @@ len = net.B^2/2;
 y1_grad = y_grad(1:len); 
 y2_grad = y_grad(len+1:end);
 
-% determine number of weight matrices and compute Gradients of Net. Output
-if net.Gnet.Nlayers == 3
-    % calculate jacobian of G wrt y1
-    net.Gnet = net_dNetdI(net.Gnet,true);
-    net.Fnet = net_dNetdI(net.Fnet,false);
-    % calculate jacobian of each network's output wrt weights
-    net.Gnet = net_dNetdw(net.Gnet);
-    net.Fnet = net_dNetdw(net.Fnet);    
-elseif net.Gnet.Nlayers == 4
-    % calculate jacobian of G wrt y1
-    net.Gnet = net_dNetdI2(net.Gnet,true);
-    net.Fnet = net_dNetdI2(net.Fnet,false);
-    % calculate jacobian of each network's output wrt weights
-    net.Gnet = net_dNetdw2(net.Gnet);
-    net.Fnet = net_dNetdw2(net.Fnet); 
-end
+% calculate jacobian of G wrt y1
+net.Gnet = net_dNetdI(net.Gnet,true);
+net.Fnet = net_dNetdI(net.Fnet,false);
+% calculate jacobian of each network's output wrt weights
+net.Gnet = net_dNetdw(net.Gnet);
+net.Fnet = net_dNetdw(net.Fnet);    
  
 % calculate gradients of cost wrt weights
 for l = 1:net.Fnet.Nlayers-1
